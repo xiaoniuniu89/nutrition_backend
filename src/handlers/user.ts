@@ -11,6 +11,7 @@ export const createNewUser = async (req, res) => {
         lName: req.body.family_name,
         id: req.body.sub,
         email: req.body.email,
+        image: req.body.image,
       },
     });
 
