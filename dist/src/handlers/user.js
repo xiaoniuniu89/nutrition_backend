@@ -83,17 +83,15 @@ var createNewUser = function (req, res) { return __awaiter(void 0, void 0, void 
 }); };
 exports.createNewUser = createNewUser;
 var getUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var users, id, user;
+    var id, user;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, db_1.default.user.findMany()];
-            case 1:
-                users = _a.sent();
+            case 0:
                 id = req.params.id;
                 return [4 /*yield*/, db_1.default.user.findUnique({
                         where: { id: id },
                     })];
-            case 2:
+            case 1:
                 user = _a.sent();
                 res.json({ data: user });
                 return [2 /*return*/];
