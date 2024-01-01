@@ -29,7 +29,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var server_1 = __importDefault(require("./src/server"));
 var dotenv = __importStar(require("dotenv"));
 dotenv.config();
-server_1.default.listen(3001, function () {
+var PORT = process.env.PORT || 3001;
+server_1.default.listen(PORT, function () {
     console.log('listening on port 3001!');
 });
 //# sourceMappingURL=index.js.map
