@@ -21,6 +21,7 @@ export const createJWT = (user) => {
 
 export const protect = (req, res, next) => {
   const token = req.headers.bearer;
+  console.log(token);
 
   if (!token) {
     res.status(401);
@@ -38,7 +39,6 @@ export const protect = (req, res, next) => {
     const secret = process.env.NEXTAUTH_SECRET;
     const payload = getToken({req, secret});
     req.user = payload;
-    console.log(payload);
     next();
     return;
   } catch (e) {
