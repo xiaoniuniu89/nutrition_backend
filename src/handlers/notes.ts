@@ -1,10 +1,16 @@
 import prisma from "../db";
+import { startOfWeek, endOfWeek, format } from 'date-fns';
 
 export const getDiaryEtries = async (req, res) => {
-    console.log(req)
+    const startOfCurrentWeek = startOfWeek(new Date(), { weekStartsOn: 0 });
+    const endOfCurrentWeek = endOfWeek(new Date(), { weekStartsOn: 0 });
+
     const notes = await prisma.diaryEntry.findMany({
-        where: { userId: req.user.id },
-        orderBy: { createdAt: "desc" },
+        where: { userId: req.user.id, createdAt: {
+            gte: startOfCurrentWeek,
+            lte: endOfCurrentWeek,
+        }, },
+        orderBy: { createdAt: "asc" },
     });
 
     console.log(notes);
