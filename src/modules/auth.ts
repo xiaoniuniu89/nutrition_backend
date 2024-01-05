@@ -20,13 +20,12 @@ export const createJWT = (user) => {
 };
 
 export const protect = (req, res, next) => {
-  const token = req.headers.bearer;
+  // const secret = process.env.NEXTAUTH_SECRET;
+  const secret = process.env.NEXTAUTH_SECRET;
 
-  if (!token) {
-    res.status(401);
-    res.send("Not authorized/No header");
-    return;
-  }
+  const token = getToken({req, secret});
+  // console.log(payload);
+  // const token = req.headers.bearer;
 
   if (!token) {
     res.status(401);
@@ -35,9 +34,9 @@ export const protect = (req, res, next) => {
   }
 
   try {
-    const secret = process.env.NEXTAUTH_SECRET;
-    const payload = getToken({req, secret});
-    req.user = payload;
+    // const secret = process.env.NEXTAUTH_SECRET;
+    // const payload = getToken({req, secret});
+    req.user = token;
     next();
     return;
   } catch (e) {
