@@ -32,8 +32,6 @@ export const protect = (req, res, next) => {
 
   const [, token] = bearer.split(" ");
 
-  console.log("token", token )
-
   if (!token) {
     res.status(401);
     res.send("Not authorized/No Token");
