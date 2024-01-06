@@ -13,7 +13,7 @@ export const getDiaryEtries = async (req, res) => {
         orderBy: { createdAt: "asc" },
     });
 
-    console.log(notes);
+    // console.log(notes);
 
     res.json({ data: notes });
 };
