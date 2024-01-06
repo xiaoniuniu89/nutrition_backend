@@ -19,7 +19,21 @@ export const createJWT = (user) => {
   return token;
 };
 
-export const protect = async (req, res, next) => {
+export const protect = (req, res, next) => {
+  const token = req.headers.bearer;
+
+  if (!token) {
+    res.status(401);
+    res.send("Not authorized/No header");
+    return;
+  }
+
+  if (!token) {
+    res.status(401);
+    res.send("Not authorized/No Token");
+    return;
+  }
+
   try {
     const secret = process.env.NEXTAUTH_SECRET;
     const payload = getToken({req, secret});
