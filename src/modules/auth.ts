@@ -2,6 +2,8 @@ import jwt, { Secret } from "jsonwebtoken";
 import * as bcrypt from "bcrypt";
 import { getToken, decode } from "next-auth/jwt";
 
+const secret = process.env.NEXTAUTH_SECRET
+
 // returns true if password matches hash
 export const comparePasswords = (password, hash) => {
   return bcrypt.compare(password, hash);
@@ -19,27 +21,35 @@ export const createJWT = (user) => {
   return token;
 };
 
-export const protect = async (req, res, next) => {
-  // const token = req.headers.bearer;
+export const protect = (req, res, next) => {
+  const bearer = req.headers.authorization;
+
+  if (!bearer) {
+    res.status(401);
+    res.send("Not authorized/No header");
+    return;
+  }
+
+  const [, token] = bearer.split(" ");
+
+  console.log("token", token )
+
+  if (!token) {
+    res.status(401);
+    res.send("Not authorized/No Token");
+    return;
+  }
 
   try {
-    const token = getToken({ req });
-    console.log("JSON Web Token", token);
-    req.user = token;
+    
+    const payload = decode(token);
+    req.user = payload;
     next();
     return;
   } catch (e) {
     console.error(e);
     res.status(401);
-    res.send("Not authorized/Invalid Token: " + e);
+    res.send("Not authorized/Invalid Token");
     return;
   }
-
-  // if (!token) {
-  //   res.status(401);
-  //   res.send("Not authorized/No header");
-  //   return;
-  // }
-
-  
 };
