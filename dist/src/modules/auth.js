@@ -30,6 +30,7 @@ exports.protect = exports.createJWT = exports.hashPassword = exports.comparePass
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var bcrypt = __importStar(require("bcrypt"));
 var jwt_1 = require("next-auth/jwt");
+var SECRET = process.env.NEXTAUTH_SECRET;
 // returns true if password matches hash
 var comparePasswords = function (password, hash) {
     return bcrypt.compare(password, hash);
@@ -45,29 +46,23 @@ var createJWT = function (user) {
 };
 exports.createJWT = createJWT;
 var protect = function (req, res, next) {
-    var token = req.headers.bearer;
-    if (!token) {
-        res.status(401);
-        res.send("Not authorized/No header");
-        return;
+    var bearer = req.headers.authorization;
+    if (!bearer) {
+        return res.status(401).json({ message: "Not authorized/No header" });
     }
+    var _a = bearer.split(" "), token = _a[1];
     if (!token) {
-        res.status(401);
-        res.send("Not authorized/No Token");
-        return;
+        return res.status(401).json({ message: "Not authorized/No Token" });
     }
     try {
-        var secret = process.env.NEXTAUTH_SECRET;
-        var payload = (0, jwt_1.getToken)({ req: req, secret: secret });
+        var payload = (0, jwt_1.getToken)({ req: req, secret: SECRET });
+        console.log("PAYLOAD ", payload);
         req.user = payload;
         next();
-        return;
     }
     catch (e) {
         console.error(e);
-        res.status(401);
-        res.send("Not authorized/Invalid Token: " + e);
-        return;
+        return res.status(401).json({ message: "Not authorized/Invalid Token" });
     }
 };
 exports.protect = protect;

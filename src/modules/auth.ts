@@ -36,6 +36,7 @@ export const protect = (req, res, next) => {
 
   try {
     const payload = getToken({req, secret: SECRET});
+    console.log("PAYLOAD ", payload);
     req.user = payload;
     next();
   } catch (e) {
